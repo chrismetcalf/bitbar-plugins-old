@@ -18,4 +18,4 @@ else
   echo "$name 🕗$(printf "%02d" $(($diff / 3600))):$(printf "%02d" $((($diff / 60) % 60)))"
 fi
 echo "---"
-$HOME/bin/doing today
+$HOME/bin/doing today | /usr/local/bin/gtac
