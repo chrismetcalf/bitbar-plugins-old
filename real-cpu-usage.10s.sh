@@ -11,8 +11,6 @@ USED=$(echo 100 - "$IDLE" | bc)
 
 echo "$USED%"
 echo "---"
-uptime
-echo "---"
 /usr/local/bin/gdf -h | tail -n -1
 echo "---"
 iostat
