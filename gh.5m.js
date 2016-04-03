@@ -40,7 +40,7 @@ gh.scrapeContributionDataAndStats(userUrl, function(data) {
   // Validate Request Data Exists
   if (data) {
     // Retrive Request Data
-    var commitsToday = data.commitsToday + data.statsData.totalContributions,
+    var commitsToday = data.commitsToday,
     currentStreak = data.statsData.currentStreak,
     longestStreak = data.statsData.longestStreak,
     totalContributions = data.statsData.totalContributions;
