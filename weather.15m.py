@@ -9,8 +9,10 @@
 # <bitbar.image>https://daniel.seripap.com/content/images/2016/01/bb-weather_v1-3-5-1.png</bitbar.image>
 # <bitbar.dependencies>python</bitbar.dependencies>
 
+import os
 import json
 import urllib2
+import subprocess
 from random import randint
 
 api_key = '07706af6a175d8f3a2dac9b909c23ba2' # get yours at https://developer.forecast.io
@@ -18,8 +20,15 @@ units = '' # change to si for metric, default is imperial
 
 def auto_loc_lookup():
   try:
-    return json.load(urllib2.urlopen('http://ipinfo.io/json'))
-  except urllib2.HTTPError:
+    loc = subprocess.check_output([
+        '/usr/local/bin/CoreLocationCLI',
+        '-once', 'YES',
+        '-format', '%latitude,%longitude']).strip()
+    return loc
+  except:
+    # Read our location from a ~/.where file
+    with open(os.path.expanduser('~') + '/.where', 'r') as f:
+        return f.read().strip()
     return False
 
 def full_country_name(country):
@@ -75,12 +84,11 @@ def get_wx():
   if location is False:
     return False
 
-  for locData in location:
-    locData.encode('utf-8')
+  location.encode('utf-8')
 
   try:
-    if 'loc' in location:
-      wx = json.load(urllib2.urlopen('https://api.forecast.io/forecast/' + api_key + '/' + location['loc'] + '?units=' + units + "&v=" + str(randint(0,100))))
+    if location:
+      wx = json.load(urllib2.urlopen('https://api.forecast.io/forecast/' + api_key + '/' + location + '?units=' + units + "&v=" + str(randint(0,100))))
     else:
       return False
   except urllib2.HTTPError:
@@ -126,7 +134,7 @@ def get_wx():
       for item in wx['minutely']:
         if item == 'summary':
           weather_data['next_hour'] = str((wx['minutely']['summary'].encode('utf-8')))
-        
+
     if 'city' in location and 'region' in location:
       if location['city'] == '' and location['region'] == '':
         if 'country' in location:
@@ -134,7 +142,7 @@ def get_wx():
 
             if country is False or location['country'] == '':
               weather_data['country'] = 'See Full Forecast'
-            else: 
+            else:
               weather_data['country'] = country
       else:
         weather_data['city'] = str(location['city'].encode('utf-8'))
@@ -165,7 +173,7 @@ def render_wx():
   if 'icon' in weather_data and 'temperature' in weather_data:
     print weather_data['icon'] + ' ' + weather_data['temperature']
   else:
-    print 'N/A'  
+    print 'N/A'
 
   print '---'
 
@@ -176,24 +184,24 @@ def render_wx():
 
   if 'condition' in weather_data and 'feels_like' in weather_data:
     print weather_data['condition'] + ', Feels Like: ' + weather_data['feels_like']
-  
+
   print '---'
-  
+
   if 'next_hour' in weather_data:
     print weather_data['next_hour']
-  
+
   if 'wind' in weather_data and 'windBearing' in weather_data:
     print 'Wind: ' + weather_data['wind'] + ' ' + weather_data['windBearing']
-  
+
   if 'humidity' in weather_data:
     print 'Humidity: ' + weather_data['humidity']
-  
+
   if 'dewPoint' in weather_data:
     print 'Dew Point: ' + weather_data['dewPoint']
-  
+
   if 'visibility' in weather_data:
     print 'Visibility: ' + weather_data['visibility']
-  
+
   if 'pressure' in weather_data:
     print 'Pressure: ' + weather_data['pressure']
 
