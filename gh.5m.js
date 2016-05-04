@@ -63,7 +63,7 @@ gh.scrapeContributionDataAndStats(userUrl, function(data) {
       console.log(visibleEmoji, " Contributions Today: ", commitsToday, visibleEmoji, contributionsTodayColor);
       console.log("---");
     }
-    console.log("Total: ", totalContributions, totalContributionsColor);
+    // console.log("Total: ", totalContributions, totalContributionsColor);
     if (contributionGoalTracking) {
       console.log("---");
       console.log("Contribution Goal");
