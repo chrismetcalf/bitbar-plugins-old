@@ -26,13 +26,14 @@
 
 import json
 import urllib2
+import os
 
 # You need to set your TRAVIS_KEY to an API key for travis.
 # -- Please note that this IS NOT the 'Token' listed on the Travis CI website
 # -- Again, this is NOT the token on https://travis-ci.org/profile/your-name
 # The easiest way to get this key is to use the official travis client
 # (`gem install travis`), and run `travis_token`.
-TRAVIS_KEY = 'TOKENGOESHERE'
+TRAVIS_KEY = os.getenv( 'TRAVIS_KEY', 'TOKENGOESHERE' )
 
 # If you don't want to check all repos, then specify the ones you do wish to
 # check here, and this plugin will only get the details of these repos.
